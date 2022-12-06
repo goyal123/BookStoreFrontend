@@ -3,6 +3,11 @@ import { makeStyles } from '@mui/styles';
 import { styled, alpha } from '@mui/material/styles';
 import InputBase from '@mui/material/InputBase';
 import SearchIcon from '@mui/icons-material/Search';
+import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
+import PermIdentityIcon from '@mui/icons-material/PermIdentity';
+import { getcart } from '../services/Dataservice';
+import { navigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const useStyle = makeStyles({
     Header:{
@@ -26,6 +31,24 @@ const useStyle = makeStyles({
       },
       item3:{
         marginLeft:'30px'
+      },
+      row1:{
+        display:'flex',
+        flexDirection:'column',
+        marginTop:'15px',
+        marginLeft:'200px',
+        backgroundColor:'',
+        height:'50px',
+        width:'50px',
+        marginRight:'20px',
+        color:'white'
+      },
+      row2:{
+        display:'flex',
+        flexDirection:'column',
+        marginLeft:'20px',
+        marginTop:'15px',
+        color:'white'
       }
 })
 
@@ -66,6 +89,11 @@ const Search = styled('div')(({ theme }) => ({
 
 export default function Header() {
     const classes = useStyle()   
+    const navigate = useNavigate();
+    const gotocart = () => {
+      navigate('/cart')
+    }
+
   return (
     <>
     <div className={classes.Header}>
@@ -83,6 +111,14 @@ export default function Header() {
             inputProps={{ 'aria-label': 'search' }}
           />
         </Search>
+        </div>
+        <div className={classes.row1}>
+          <PermIdentityIcon sx={{color:'white',marginRight:'50px'}}/>
+            Profile 
+        </div>
+        <div className={classes.row2}>
+          <ShoppingCartOutlinedIcon sx={{color:'white'}} onClick={gotocart}/>
+        Cart
         </div>
     </div>
     

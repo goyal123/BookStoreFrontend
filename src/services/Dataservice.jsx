@@ -19,3 +19,22 @@ export const getBookbyid = (bookid) => {
     console.log(response)
     return response;
 }
+
+export const addtocart = (cartobj) => {
+    console.log(cartobj)
+    let response = axios.post("https://localhost:44328/api/Cart/AddCart",cartobj,headerconfig);
+    console.log(response)
+    return response;
+}
+
+export const getuseridapi=()=>{
+    let response = axios.get("https://localhost:44328/api/User/GetUserId",headerconfig);
+    console.log(response)
+    return response;
+}
+
+export const getcart=() => {
+    let response = axios.get("https://localhost:44328/api/Cart/GetCart",headerconfig);
+    console.log(response)
+    return response;
+}

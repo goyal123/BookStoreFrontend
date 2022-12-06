@@ -14,6 +14,7 @@ import Card from '@mui/material/Card';
 import { navigate } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import Paper from '@mui/material/Paper';
+import { getuseridapi } from '../../services/Dataservice';
 
 const BootstrapInput = styled(InputBase)(({ theme }) => ({
     'label + &': {
@@ -130,8 +131,13 @@ const submit = () => {
   loginapi(signinobj).then((response)=>{
     console.log(response);
     localStorage.setItem("token",response.data.data)
-    navigate('/dashboard')
+    // navigate('/dashboard')
   })
+  getuseridapi().then((response) => {
+    console.log(response);
+    localStorage.setItem("UserId",response.data.data)
+  })
+  navigate('/dashboard')
 }
 
 const signupcall = () => {
