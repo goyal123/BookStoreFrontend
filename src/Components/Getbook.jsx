@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import { makeStyles } from '@mui/styles';
 import Header from './Header';
-import { addtocart, getBookbyid } from '../services/Dataservice';
+import { addfeedapi, addtocart, addtowishlistapi, getBookbyid, getcart, getfeedapi } from '../services/Dataservice';
 import Box from '@mui/material/Box';
 import StarIcon from '@mui/icons-material/Star';
 import Button from '@mui/material/Button';
+import Feedsingle from './Feedsingle';
+import FavoriteOutlinedIcon from '@mui/icons-material/FavoriteOutlined';
 
 const useStyle = makeStyles({
     Container:{
@@ -153,6 +155,13 @@ const useStyle = makeStyles({
         flexDirection:'row',
         alignItems:'flex-end',
         backgroundColor:'red'
+    },
+    selected:{
+        color:'red',
+        cursor:'pointer'
+    },
+    unselected:{
+        color:'grey'
     }
 
 })
@@ -160,7 +169,11 @@ const useStyle = makeStyles({
 
 export default function Getbook(props) {
     const bookid = localStorage.getItem("bookid");
+    const [feedobj, setfeedobj] = useState({ comment: '', rating:0 ,bookId:0 })
     const [bookobj,setbookObj] = useState({title:'' , description:'',author:'',actualPrice:0,discountedPrice:0,rating:0})
+    const [rating,setrating] = useState(0)
+    const [feedlist, setfeedList] = useState([])
+
     useEffect(() => {
         getBookbyid(bookid).then((response) => {
             console.log(response)
@@ -192,7 +205,46 @@ export default function Getbook(props) {
         }).catch((error) => {
             console.log(error)
         })
+
+        
     }
+
+    const addwishlist=() => {
+        addtowishlistapi(bookid).then((response) => {
+            console.log(response)
+        }).catch((response) => {
+            console.log(response)
+        })
+    }
+
+    const takecomment = (e) => {
+        setfeedobj(prevstate => ({ ...prevstate, comment: e.target.value }));
+        console.log(e.target.value);
+      }
+    
+    const submitfeed=() => {
+        addfeedapi(feedobj).then((response) => {
+            console.log(response)
+        }).catch((response) => {
+            console.log(response)
+        })
+    }
+    
+    const handlerating=(ratingvalue) => {
+        setfeedobj({
+            rating:ratingvalue,
+            bookId:Number(localStorage.getItem("bookid"))
+        
+    })}
+
+    useEffect(() => {
+        getfeedapi(bookid).then((response) => {
+            console.log(response);
+            setfeedList(response.data.data)
+        }).catch((response) => {
+            console.log(response)
+        })
+    },[])
     
   const  classes = useStyle()  
   return (
@@ -247,20 +299,28 @@ export default function Getbook(props) {
                         Overall Rating
                         <br></br>
                         <div className={classes.row9}>
-                        <StarIcon size='medium' sx={{ color: 'lightgrey' }} />
-                        <StarIcon size='medium' sx={{ color: 'lightgrey' }} />
-                        <StarIcon size='medium' sx={{ color: 'lightgrey' }} />
-                        <StarIcon size='medium' sx={{ color: 'lightgrey' }} />
-                        <StarIcon size='medium' sx={{ color: 'lightgrey' }} />
+                            {[1,2,3,4,5].map(ratingvalue => (<span key={ratingvalue} className={ratingvalue< 0 ? classes.selected: classes.unselected}><StarIcon size='medium' onClick={() => handlerating(ratingvalue)} /></span>))}
+                            {feedobj.rating}
                         <br></br>
                         </div>
                         
-                        <textarea rows='4' cols='95' placeholder=' Write your review' ></textarea>
+                        <textarea rows='4' cols='95' placeholder=' Write your review' onChange={takecomment}></textarea>
                     </div>
-                        <Button variant="contained" sx={{width:'6vw',height:'4vh',marginLeft:'47.5vw',marginBottom:'10px'}}>Submit</Button>
+                        <Button variant="contained" sx={{width:'6vw',height:'4vh',marginLeft:'47.5vw',marginBottom:'10px'}}  onClick={submitfeed}>Submit</Button>
                     
                     
                     
+                </div>
+                <br></br>
+                <div>
+                    
+                    <div>
+                    {
+                        feedlist.map((feed) => <Feedsingle feed={feed}/>)
+                        
+                    }
+                    
+                    </div>
                 </div>
             </div>
             
@@ -270,7 +330,7 @@ export default function Getbook(props) {
                 <Button variant="contained" sx={{width:'10.5vw',backgroundColor:'brown'}} onClick={addcart}>ADD To BAG</Button>  
             </div>
                 
-                <Button variant="contained" sx={{width:'10.5vw',backgroundColor:'#333333'}}>WISHLIST</Button>
+                <Button variant="contained" sx={{width:'10.5vw',backgroundColor:'#333333'}} onClick={addwishlist}><FavoriteOutlinedIcon sx={{color:'white',marginRight:'10px'}}/> WISHLIST</Button>
         </div>
         
     

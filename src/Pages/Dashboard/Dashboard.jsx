@@ -57,7 +57,6 @@ const useStyle = makeStyles({
         left: '100px',
     }
     
-    
 })
 
 export default function Dashboard() {
@@ -97,12 +96,13 @@ export default function Dashboard() {
                         
                     </Box>
                 </Box>
-                    <Box  sx={{ display: 'flex',width:'80vw',height:'auto',marginLeft:'150px',backgroundColor:''}}>
+                <Box sx={{display:'flex',flexDirection:'column',width:'65vw',height:'60vh',backgroundColor:'',marginLeft:'150px'}}>
+                    <Box  sx={{ display: 'flex',flexDirection:'row', width:'80vw',height:'auto',marginLeft:'0px',backgroundColor:''}}>
                         {
-                           bookList.map((book) => (<Bookmenu book={book}/>))
+                           bookList.map((book) => ( <Bookmenu book={book}/>))
                         }
                     </Box>
-                
+                    </Box>
             </Box>
         </div>
     </>
